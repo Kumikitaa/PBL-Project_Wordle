@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>My Wordle</title>
+
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='wIcon.jpg') }}">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+        <!-- Styles -->
+        <style>
+            /* HEADER */
+            header{
+                text-align: center;
+                background-color: black;
+                padding-bottom: 150px;
+                padding-top: 100px;
+                color: whitesmoke;
+                font-size: large;
+            }
+
+            /* MAIN PART */
+            .my-container{
+                background-color: black;
+                text-align: center;
+                color: whitesmoke
+            }
+            .text-container1{
+                text-align: justify;
+                padding-left: 150px;
+                padding-right: 20px;
+            }
+            .text-container2{
+                text-align: justify;
+                padding-left: 160px;
+                padding-bottom: 20px;
+            }
+            #what_is_wordle{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 50px;
+                font-size: large;
+            }
+            #how_to_play{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-bottom: 50px;
+                font-size: large;
+            }
+            /* BUTTON */
+            .my-button{
+                background-color: yellow;
+                border-radius: 5%;
+                padding: 10px 35px;
+                border: 10px;
+                color: black;
+            }
+            .my-button:hover{
+                background-color: lightgreen;
+                color: whitesmoke;
+            }
+
+            /* FOOTER */
+            .footer-container{
+                background-color: black;
+                padding-bottom: 15px;
+                padding-top: 15px;
+                padding-left: 30px;
+                padding-right: 30px;
+                display: flex;
+                justify-content: space-around;
+                color: white;
+                font-size: large;
+            }
+            .footer-container ul{
+                list-style-type: none;
+                padding: 0 0 0 0;
+            }
+            .footer-container a{
+                text-decoration: none;
+                color: whitesmoke;
+            }
+            .footer-container a:hover{
+                color:forestgreen;
+            }
+        </style>
+    </head>
+
+    <body style="font-family: 'Open Sans', system-ui;">
+        <!-- HEADER -->
+        <header>
+            <h1 style="padding-bottom: 10px; font-size: 50px;">Welcome to My Wordle Game</h1>
+            <a href="{{ url_for('game') }}"><button class="my-button"><span>Play Game</span></button></a>
+        </header>
+        
+        <!-- MAIN PART -->
+        <div class="container-fluid my-container">
+            <!-- What is Wordle? -->
+            <h3 style="color:yellow; font-family: 'Open Sans', system-ui; font-size:40px;">What is Wordle?</h3>
+            <section id="what_is_wordle">
+                <div class="text-container1">
+                    Wordle is a web-based word game created and developed 
+                    by Welsh software engineer Josh Wardle. Players have six 
+                    attempts to guess a five-letter word, with feedback given 
+                    for each guess in the form of colored tiles indicating when 
+                    letters match or occupy the correct position. The mechanics 
+                    are nearly identical to the 1955 pen-and-paper game Jotto and 
+                    the television game show franchise Lingo.
+                </div>
+                <div class="video-container" style="flex: 1; padding-right: 150px">
+                    <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='playWordle.png') }}" alt="Wordle" width="250px" height="250px"></a>
+                </div>
+            </section>
+            <!-- How to play -->
+            <h3 style="color:yellow; font-family: 'Open Sans', system-ui; font-size:40px;">How to play</h3>
+            <section id="how_to_play">
+                <div class="text-container2">
+                    <ul style="list-style-type: none;">
+                        <li>1) Enter a 5 letter word</li>
+                        <li>2) If after entering the word the letter changed its color, then:</li>
+                        <ul style="list-style-type: none;">
+                            <li>1) Green - The letter exists in a hidden word and is located in the same spot</li>
+                            <li>2) Yellow - The letter exists in a hidden word, but is located in different spot</li>
+                            <li>3) Otherwise the letter doesn't exist in a hidden word</li>
+                        </ul> 
+                    </ul> 
+                </div>
+                <div class="video-container" style="flex: 1;">
+                    <iframe width="410" height="240" src="https://www.youtube.com/embed/lv4Zg-209MY" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </section>
+        </div>
+
+        <hr style="border: 10; background-color: yellow; height:3px; margin:0;">
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-container">
+
+                <div style="text-align: center;">
+                    <p><span style="font-size: 35px; color: yellow;">Our Github</span></p>
+                    <ul>
+                        <li><a href="https://github.com/Kumikitaa">Github Profile</a></li>
+                        <li><a href="#">Github Code</a></li>
+                        <li><a href="https://github.com/Kumikitaa/PBL-Project_Wordle">Github Repository</a></li>
+                    </ul>
+                </div>
+                    
+                <div style="text-align: center;">
+                    <p><span style="font-size: 35px; color:yellow;">Contact</span></p>
+                    <ul>
+                        <li>
+                            <p>
+                                If you have any questions or would like to get in touch with us,<br>
+                                feel free to email us at <a href="mailto:gurjiyk@gmail.com" style="color:forestgreen">gurjiyk@gmail.com</a>.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </body>
+</html>

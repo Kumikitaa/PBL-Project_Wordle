@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wordle</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='wIcon.jpg') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        #my-container {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        #board-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 5px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .square {
+            border: 2px solid rgb(58, 58, 60);
+            min-width: 60px;
+            min-height: 60px;
+        }
+
+        a:hover {
+            color: forestgreen;
+            text-decoration: none;
+        }
+
+        a {
+            text-align: left;
+            color: whitesmoke;
+            padding-left: 20px;
+            text-decoration: none;
+        }
+    </style>
+
+
+
+</head>
+
+<body style="background-color: black; color:whitesmoke; font-family: 'Open Sans', system-ui;">
+    <a href="{{ url_for('index') }}">Go to Homepage</a>
+    <div id="my-container">
+        <header>
+            <h1>My Wordle</h1>
+            <hr style="background-color: rgb(58, 58, 60); width: 350px;">
+        </header>
+
+        <form id="wordleForm" action="/game" method="POST">
+            <label for="guess">Enter a word:</label>
+            <input type="text" id="guess" name="guess" required>
+            <input type="hidden" name="language" value="{{ language }}">
+            <button type="submit">Enter</button>
+        </form>
+
+        <div id="board-container">
+            <div id="board"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        //createSquares();
+        //store guess
+        var textValue;
+
+        //Get Socket data
+        const socket = new WebSocket('ws://' + location.host + '/evaluate_game');
+        socket.addEventListener('message', ev => {
+            console.log("Received data:", ev.data);
+
+            try {
+                let data = JSON.parse(ev.data);
+                console.log(data);
+                
+                // Rest of your code
+                addText(textValue, data.word);
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+                addText(textValue, ev.data);
+            }
+
+            textValue = "";
+        });
+
+      
+        document.getElementById('wordleForm').onsubmit = ev => {
+          ev.preventDefault();
+          const textField = document.getElementById('guess');
+          console.log(textField.value); 
+          //get guess
+          textValue = textField.value;
+          socket.send(textField.value);
+          textField.value = '';
+        };
+
+        //Add text to the board
+
+        function addText(text, correct) {
+            if (correct == "Invalid Word"){
+                alert(correct);
+                return;
+            }
+
+            if (correct == "You win!"){
+                alert(correct);
+                return;
+            }
+
+            if (correct == "You have already written that word"){
+                alert(correct);
+                return;
+            }
+
+            if (correct.split("&").length == 2){
+                data = correct.split("&")
+                alert(`${data[0]} the word is: ${data[1]}`);
+                return;
+            }
+
+            const gameBoard = document.getElementById("board");
+            for (var i = 0; i < 5; i++){
+                let square = document.createElement("div");
+                square.classList.add("square");
+                console.log(correct);
+                let textColor = getTextColor(text[i], correct)
+                square.innerHTML = textColor;
+                gameBoard.appendChild(square);
+            }
+        }
+
+        function getTextColor(guess, correct) {
+            let guesses = correct.split(" ");
+            console.log(guesses);
+
+            for (var i = 0; i < 5; i++) {
+                if (guess === guesses[i]) {
+                    return `<span style="color: green;">${guess}</span>`;
+                } else if (guess + "*" === guesses[i]) {
+                    return `<span style="color: yellow;">${guess}</span>`;
+                }
+            }
+
+            // If none of the conditions are met, default to gray
+            return `<span style="color: grey;">${guess}</span>`;
+        }
+    });
+</script>
+
+</html>
